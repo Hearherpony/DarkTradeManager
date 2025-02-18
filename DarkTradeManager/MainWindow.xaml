@@ -1,0 +1,55 @@
+﻿<Window x:Class="DarkTradeManager.DashboardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:DarkTradeManager"
+        Title="Dashboard" Height="600" Width="900"
+        Background="#FF1E1E1E">
+    <Window.Resources>
+        <local:DarkImageConverter x:Key="ImgConv"/>
+    </Window.Resources>
+    <Grid Margin="10">
+        <DockPanel>
+            <!-- Верхняя панель -->
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Background="#FF2D2D30" Padding="10">
+                <Image Source="file:///D:/Teh/задание/Images/icons/logo.png" Height="40" Margin="0,0,10,0"/>
+                <TextBlock Text="Добро пожаловать, " Foreground="White" FontSize="16" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding CurrentUser.FullName}" Foreground="White" FontSize="16" VerticalAlignment="Center"/>
+                <Button Content="Выйти" HorizontalAlignment="Right" Click="BtnLogout_Click" Background="#FF007ACC" Foreground="White" Margin="Auto,0,0,0"/>
+            </StackPanel>
+            <!-- Панель фильтров и поиска -->
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Background="#FF2D2D30" Padding="10">
+                <TextBlock Text="Поиск:" Foreground="White" FontSize="14" VerticalAlignment="Center"/>
+                <TextBox x:Name="TxtSearch" Width="200" Margin="10,0" Background="#FF3E3E42" Foreground="White" BorderBrush="Gray" TextChanged="TxtSearch_TextChanged"/>
+                <TextBlock Text="Производитель:" Foreground="White" FontSize="14" VerticalAlignment="Center"/>
+                <ComboBox x:Name="CmbManufacturer" Width="150" Margin="10,0" SelectionChanged="CmbManufacturer_SelectionChanged" Background="#FF3E3E42" Foreground="White" BorderBrush="Gray">
+                    <ComboBoxItem Content="Все производители" IsSelected="True"/>
+                </ComboBox>
+                <TextBlock x:Name="TxtItemCount" Foreground="White" FontSize="14" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            </StackPanel>
+            <!-- Таблица товаров -->
+            <DataGrid x:Name="DgItems" AutoGenerateColumns="False" Background="#FF1E1E1E" Foreground="White" HeadersVisibility="Column" CanUserAddRows="False" Margin="10">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Stock}" Value="0">
+                                <Setter Property="Background" Value="#FF3E3E42"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Изображение">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Width="60" Height="60" Source="{Binding ImagePath, Converter={StaticResource ImgConv}}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Название" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Цена" Binding="{Binding Cost}"/>
+                    <DataGridTextColumn Header="Производитель" Binding="{Binding Manufacturer}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+    </Grid>
+</Window>
